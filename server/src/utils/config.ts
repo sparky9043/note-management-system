@@ -9,4 +9,6 @@ const DB_PASSWORD = process.env.DB_PASSWORD;
 
 const DB_PORT = process.env.DB_PORT || 5432;
 
-export default { PORT, DB_USER, DB_PASSWORD, DB_PORT };
+const DB_NAME = process.env.DB_NAME;
+
+export default { PORT, DB_USER, DB_PASSWORD, DB_PORT, DB_NAME };
