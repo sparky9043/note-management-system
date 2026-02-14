@@ -23,15 +23,15 @@ interface Section extends NewSection {
   created_at: string;
 }
 
-// Note Types
-interface NewNote {
+// Entry Types
+interface NewNoteEntry {
   user_id: number;
   section_id: number;
   tite: string;
   content: string;
 }
 
-interface Note extends NewNote {
+interface NoteEntry extends NewNoteEntry {
   id: number;
   created_at: string;
 }
