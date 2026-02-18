@@ -1,0 +1,9 @@
+POST http://localhost:3000/api/notes
+Content-Type: application/json
+
+{
+  "user_id": 2,
+  "section_id": 1,
+  "title": "One Good App",
+  "content": "Keep working on the app idea!"
+}
