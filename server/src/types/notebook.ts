@@ -27,7 +27,7 @@ export interface Section extends NewSection {
 export interface NewNoteEntry {
   user_id: number;
   section_id: number;
-  tite: string;
+  title: string;
   content: string;
 }
 
