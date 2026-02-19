@@ -3,13 +3,13 @@ import { NewNoteEntry, NoteEntry } from "../src/types/notebook";
 import pool from "./pool";
 
 const getNotes = async (): Promise<NoteEntry[]> => {
-  const savedNotes = await pool.query<NoteEntry>(
+  const response = await pool.query<NoteEntry>(
     `
       SELECT * FROM note_entries;
     `
   );
 
-  return savedNotes.rows;
+  return response.rows;
 };
 
 const getNoteById = async (noteId: number): Promise<NoteEntry> => {
@@ -34,7 +34,7 @@ const createNote = async (newNoteEntryObject: NewNoteEntry): Promise<NoteEntry> 
     throw new Error('missing fields');
   }
 
-  const savedNote = await pool.query<NoteEntry>(
+  const response = await pool.query<NoteEntry>(
     `
       INSERT INTO note_entries (user_id, section_id, title, content)
       VALUES ($1, $2, $3, $4) RETURNING *;
@@ -42,11 +42,11 @@ const createNote = async (newNoteEntryObject: NewNoteEntry): Promise<NoteEntry> 
     [Number(user_id), Number(section_id), title, content],
   );
 
-  if (!savedNote.rows || !savedNote.rows.length) {
+  if (!response.rows || !response.rows.length) {
     throw new Error('unexpected error occurred');
   }
 
-  return savedNote.rows[0];
+  return response.rows[0];
 };
 
 export default { getNotes, createNote, getNoteById };
