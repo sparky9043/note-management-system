@@ -1,3 +1,4 @@
+import http from "../src/errors/http";
 import { NewNoteEntry, NoteEntry } from "../src/types/notebook";
 import pool from "./pool";
 
@@ -20,7 +21,7 @@ const getNoteById = async (noteId: number): Promise<NoteEntry> => {
   );
 
   if (!response.rows || !response.rows.length) {
-    throw new Error('note not found');
+    throw new http.NotFoundError('no notes found by that id');
   }
 
   return response.rows[0];
