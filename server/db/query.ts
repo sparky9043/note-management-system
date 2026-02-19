@@ -11,6 +11,21 @@ const getNotes = async (): Promise<NoteEntry[]> => {
   return savedNotes.rows;
 };
 
+const getNoteById = async (noteId: number): Promise<NoteEntry> => {
+  const response = await pool.query<NoteEntry>(
+    `
+      SELECT * FROM note_entries WHERE id = $1;
+    `,
+    [Number(noteId)]
+  );
+
+  if (!response.rows || !response.rows.length) {
+    throw new Error('note not found');
+  }
+
+  return response.rows[0];
+};
+
 const createNote = async (newNoteEntryObject: NewNoteEntry): Promise<NoteEntry> => {
   const { user_id, section_id, title, content } = newNoteEntryObject;
 
@@ -33,4 +48,4 @@ const createNote = async (newNoteEntryObject: NewNoteEntry): Promise<NoteEntry> 
   return savedNote.rows[0];
 };
 
-export default { getNotes, createNote };
+export default { getNotes, createNote, getNoteById };
