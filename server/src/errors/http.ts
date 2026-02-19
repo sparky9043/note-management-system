@@ -12,4 +12,10 @@ class NotFoundError extends HttpError {
   }
 }
 
-export default { HttpError, NotFoundError };
+class ValidationError extends HttpError {
+  constructor(message = 'invalid id format') {
+    super(message, 400);
+  }
+}
+
+export default { HttpError, NotFoundError, ValidationError };
