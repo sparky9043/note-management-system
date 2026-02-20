@@ -73,7 +73,7 @@ const insertNoteEntry = async (newNoteEntryObject: NewNoteEntry): Promise<void> 
 
   await pool.query(
     `
-      INSERT INTO note_entries
+      INSERT INTO note_entries (title, content)
       VALUES ($1, $2);
     `,
     [title, content]
