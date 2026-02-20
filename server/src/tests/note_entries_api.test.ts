@@ -4,6 +4,7 @@ import pool from '../../db/pool';
 import app from '../app';
 import supertest from 'supertest';
 import note_entries_helper from './note_entries_helper';
+// import { NoteEntry } from '../types/notebook';
 
 const api = supertest(app);
 const baseUrl = '/api/notes';
@@ -23,6 +24,8 @@ void describe('GET Requests', () => {
     
     assert.ok(response);
     assert(Array.isArray(response.body));
+
+    assert.strictEqual(note_entries_helper.defaultNotes.length, response.body.length);
   });
 });
 
