@@ -1,5 +1,5 @@
 import pool from "../../db/pool";
-import { NewNoteEntry } from "../types/notebook";
+import { NewNoteEntry, NoteEntry } from "../types/notebook";
 
 const defaultNotes = [
   {
@@ -80,4 +80,14 @@ const insertNoteEntry = async (newNoteEntryObject: NewNoteEntry): Promise<void> 
   );
 };
 
-export default { defaultNotes, resetTable, insertNoteEntry };
+const getNotesInDb = async (): Promise<NoteEntry[]> => {
+  const response = await pool.query<NoteEntry>(
+    `
+      SELECT * FROM note_entries;
+    `
+  );
+
+  return response.rows;
+};
+
+export default { defaultNotes, resetTable, insertNoteEntry, getNotesInDb };
