@@ -1,4 +1,5 @@
 import pool from "../../db/pool";
+import { NewNoteEntry } from "../types/notebook";
 
 const defaultNotes = [
   {
@@ -59,7 +60,7 @@ const defaultNotes = [
   }
 ];
 
-const resetTable = async () => {
+const resetTable = async (): Promise<void> => {
   await pool.query(
     `
       TRUNCATE TABLE note_entries RESTART IDENTITY;
@@ -67,8 +68,16 @@ const resetTable = async () => {
   );
 };
 
-// const insertNoteEntry = async () => {
+const insertNoteEntry = async (newNoteEntryObject: NewNoteEntry): Promise<void> => {
+  const { title, content } = newNoteEntryObject;
 
-// };
+  await pool.query(
+    `
+      INSERT INTO note_entries
+      VALUES ($1, $2);
+    `,
+    [title, content]
+  );
+};
 
-export default { defaultNotes, resetTable };
+export default { defaultNotes, resetTable, insertNoteEntry };
