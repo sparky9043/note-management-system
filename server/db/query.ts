@@ -28,18 +28,18 @@ const getNoteById = async (noteId: number): Promise<NoteEntry> => {
 };
 
 const createNote = async (newNoteEntryObject: NewNoteEntry): Promise<NoteEntry> => {
-  const { user_id, section_id, title, content } = newNoteEntryObject;
+  const { title, content } = newNoteEntryObject;
 
-  if (!user_id || !section_id || !title || !content) {
-    throw new Error('missing fields');
+  if (!title || !content) {
+    throw new Error('please fill out all the required fields');
   }
 
   const response = await pool.query<NoteEntry>(
     `
-      INSERT INTO note_entries (user_id, section_id, title, content)
-      VALUES ($1, $2, $3, $4) RETURNING *;
+      INSERT INTO note_entries (title, content)
+      VALUES ($1, $2) RETURNING *;
     `,
-    [Number(user_id), Number(section_id), title, content],
+    [title, content],
   );
 
   if (!response.rows || !response.rows.length) {
