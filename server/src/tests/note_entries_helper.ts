@@ -1,3 +1,5 @@
+import pool from "../../db/pool";
+
 const defaultNotes = [
   {
     "id": 1,
@@ -71,4 +73,12 @@ const defaultNotes = [
   }
 ];
 
-export default { defaultNotes };
+const resetTable = async () => {
+  await pool.query(
+    `
+      TRUNCATE TABLE note_entries RESTART IDENTITY;
+    `
+  );
+};
+
+export default { defaultNotes, resetTable };
