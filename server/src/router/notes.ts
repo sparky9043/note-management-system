@@ -37,7 +37,7 @@ notesRouter.post('/', async (req: Request<unknown, unknown, NewNoteEntry>, res: 
   }
 });
 
-notesRouter.put('/', (_req: Request<unknown>, res: Response, next: NextFunction) => {
+notesRouter.put('/:id', (_req: Request<unknown>, res: Response, next: NextFunction) => {
   try {
     res.send({ success: 'success' });
   } catch (error) {
