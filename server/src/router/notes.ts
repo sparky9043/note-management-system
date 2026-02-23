@@ -42,9 +42,9 @@ notesRouter.put('/:id', async (req: Request<{ id: string }, unknown, NewNoteEntr
     const noteId = Number(req.params.id);
     const newNote = req.body;
 
-    await query.updateNoteById(noteId, newNote);
+    const updatedNote = await query.updateNoteById(noteId, newNote);
 
-    res.send({ success: 'success' });
+    res.send(updatedNote);
   } catch (error) {
     next(error);
   }
