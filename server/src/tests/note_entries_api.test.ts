@@ -103,7 +103,7 @@ void describe('PUT Requests', () => {
   void test('returns status 200 if request has title only', async () => {
     const updateNoteId = 1;
 
-    const newContent = {
+    const newTitleOnly = {
       title: 'new title to be updated',
     };
 
@@ -111,7 +111,7 @@ void describe('PUT Requests', () => {
     
     const response = await api
       .put(`${baseUrl}/${updateNoteId}`)
-      .send(newContent)
+      .send(newTitleOnly)
       .expect(200);
     
     const notesAtEnd = await note_entries_helper.getNotesInDb();
@@ -121,7 +121,65 @@ void describe('PUT Requests', () => {
 
     // Check if DB updated the title after PUT request
     const titlesAtEnd = notesAtEnd.map(n => n.title);
-    assert(titlesAtEnd.includes(newContent.title));
+    assert(titlesAtEnd.includes(newTitleOnly.title));
+    
+    // Ensure DB size does not change after PUT request
+    assert.strictEqual(notesAtEnd.length, notesAtStart.length);
+  });
+  
+  void test('returns status 200 if request has content only', async () => {
+    const updateNoteId = 1;
+
+    const newContentOnly = {
+      content: 'new content to be updated',
+    };
+
+    const notesAtStart = await note_entries_helper.getNotesInDb();
+    
+    const response = await api
+      .put(`${baseUrl}/${updateNoteId}`)
+      .send(newContentOnly)
+      .expect(200);
+    
+    const notesAtEnd = await note_entries_helper.getNotesInDb();
+
+    assert.ok(response);
+    assert.strictEqual(response.type, 'application/json');
+
+    // Check if DB updated the content after PUT request
+    const contentsAtEnd = notesAtEnd.map(n => n.content);
+    assert(contentsAtEnd.includes(newContentOnly.content));
+    
+    // Ensure DB size does not change after PUT request
+    assert.strictEqual(notesAtEnd.length, notesAtStart.length);
+  });
+
+  void test('returns status 200 if request has both title and content', async () => {
+    const updateNoteId = 1;
+
+    const newNote = {
+      title: 'sample title',
+      content: 'new content to be updated',
+    };
+
+    const notesAtStart = await note_entries_helper.getNotesInDb();
+    
+    const response = await api
+      .put(`${baseUrl}/${updateNoteId}`)
+      .send(newNote)
+      .expect(200);
+    
+    const notesAtEnd = await note_entries_helper.getNotesInDb();
+
+    assert.ok(response);
+    assert.strictEqual(response.type, 'application/json');
+
+    // Check if DB updated the title AND content after PUT request
+    const titlesAtEnd = notesAtEnd.map(n => n.title);
+    assert(titlesAtEnd.includes(newNote.title));
+
+    const contentsAtEnd = notesAtEnd.map(n => n.content);
+    assert(contentsAtEnd.includes(newNote.content));
     
     // Ensure DB size does not change after PUT request
     assert.strictEqual(notesAtEnd.length, notesAtStart.length);
