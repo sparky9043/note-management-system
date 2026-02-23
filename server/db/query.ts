@@ -77,25 +77,23 @@ const updateNoteById = async (noteId: number, newNoteEntryObject: NewNoteEntry):
     return response.rows[0];
   } else if (newNoteEntryObject.title && !newNoteEntryObject.content) {
     newTitle = newNoteEntryObject.title;
-    newContent = savedNote.content;
 
     const response = await pool.query<NoteEntry>(
       `
-        UPDATE note_entries SET title = $1, content = $2 WHERE id = $3 RETURNING *;
+        UPDATE note_entries SET title = $1 WHERE id = $2 RETURNING *;
       `,
-      [newTitle, newContent, Number(noteId)],
+      [newTitle, Number(noteId)],
     );
 
     return response.rows[0];
   } else if (newNoteEntryObject.content && !newNoteEntryObject.title) {
-    newTitle = savedNote.title;
     newContent = newNoteEntryObject.content;
     
     const response = await pool.query<NoteEntry>(
       `
-        UPDATE note_entries SET title = $1, content = $2 WHERE id = $3 RETURNING *;
+        UPDATE note_entries SET content = $1 WHERE id = $2 RETURNING *;
       `,
-      [newTitle, newContent, Number(noteId)],
+      [newContent, Number(noteId)],
     );
 
     return response.rows[0];
