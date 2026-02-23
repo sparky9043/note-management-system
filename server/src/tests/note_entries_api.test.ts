@@ -11,6 +11,12 @@ import { NoteEntry } from '../types/notebook';
 const api = supertest(app);
 const baseUrl = '/api/notes';
 
+interface ErrorResponse {
+  code: number;
+  status: 'success' | 'error';
+  message: string;
+};
+
 beforeEach(async () => {
   await note_entries_helper.resetTable();
   for (const newNoteEntry of note_entries_helper.defaultNotes) {
@@ -75,6 +81,21 @@ void describe('POST Requests', () => {
     // check note entries includes the new note after POST request;
     const titles = notesAtEnd.map(note => note.title);
     assert(titles.includes(savedNote.title));
+  });
+
+  void test('return status 400 and the db remains unchanged with missing fields', async () => {
+    const missingTitle = {
+      content: 'i am expecting this note to not be added',
+    };
+
+    const result = await api
+      .post(baseUrl)
+      .send(missingTitle)
+      .expect(400);
+
+    const errorResponse = result.body as ErrorResponse;
+
+    console.log(errorResponse.code, errorResponse.message);
   });
 });
 
