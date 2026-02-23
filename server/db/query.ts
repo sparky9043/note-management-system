@@ -31,7 +31,7 @@ const createNote = async (newNoteEntryObject: NewNoteEntry): Promise<NoteEntry> 
   const { title, content } = newNoteEntryObject;
 
   if (!title || !content) {
-    throw new Error('please fill out all the required fields');
+    throw new error.ValidationError('please fill out all the required fields');
   }
 
   const response = await pool.query<NoteEntry>(
@@ -43,7 +43,7 @@ const createNote = async (newNoteEntryObject: NewNoteEntry): Promise<NoteEntry> 
   );
 
   if (!response.rows || !response.rows.length) {
-    throw new Error('unexpected error occurred');
+    throw new error.HttpError('unexpected error occurred');
   }
 
   return response.rows[0];
