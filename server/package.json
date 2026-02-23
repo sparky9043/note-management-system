@@ -6,7 +6,8 @@
   "scripts": {
     "tsc": "tsc",
     "dev": "ts-node-dev src/index.ts",
-    "test": "node --test --require ts-node/register"
+    "test": "node --test --require ts-node/register",
+    "test:notes": "node --test --require ts-node/register src/tests/note_entries_api.test.ts"
   },
   "keywords": [],
   "author": "",
