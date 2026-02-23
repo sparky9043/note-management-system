@@ -50,6 +50,12 @@ const createNote = async (newNoteEntryObject: NewNoteEntry): Promise<NoteEntry> 
 };
 
 const updateNoteById = async (noteId: number, newNoteEntryObject: NewNoteEntry) => {
+  const { title, content } = newNoteEntryObject;
+
+  if (!title && !content) {
+    throw new httpErrors.ValidationError('you must fill either title or content');
+  }
+  
   console.log(noteId);
 };
 
