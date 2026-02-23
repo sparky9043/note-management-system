@@ -31,7 +31,7 @@ notesRouter.get('/:id', async (req: Request<{ id: string }>, res: Response<NoteE
 notesRouter.post('/', async (req: Request<unknown, unknown, NewNoteEntry>, res: Response<NoteEntry>, next) => {
   try {
     const savedNote = await query.createNote(req.body);
-    res.json(savedNote);
+    res.status(201).json(savedNote);
   } catch (error) {
     next(error);
   }
