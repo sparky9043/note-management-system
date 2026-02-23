@@ -37,4 +37,12 @@ notesRouter.post('/', async (req: Request<unknown, unknown, NewNoteEntry>, res: 
   }
 });
 
+notesRouter.put('/', (_req: Request<unknown>, res: Response, next: NextFunction) => {
+  try {
+    res.send({ success: 'success' });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default notesRouter;
