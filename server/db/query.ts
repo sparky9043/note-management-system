@@ -49,11 +49,32 @@ const createNote = async (newNoteEntryObject: NewNoteEntry): Promise<NoteEntry> 
   return response.rows[0];
 };
 
-const updateNoteById = async (noteId: number, newNoteEntryObject: NewNoteEntry) => {
-  const { title, content } = newNoteEntryObject;
-
-  if (!title && !content) {
+const updateNoteById = async (noteId: number, newNoteEntryObject: NewNoteEntry): Promise<NoteEntry> => {
+  if (!newNoteEntryObject.title && !newNoteEntryObject.content) {
     throw new httpErrors.ValidationError('you must fill either title or content');
+  }
+
+  const savedNote = await getNoteById(noteId);
+
+  if (!savedNote) {
+    throw new httpErrors.NotFoundError('the requested note was not found');
+  }
+
+  let newTitle: string;
+  let newContent: string;
+
+  if (newNoteEntryObject.title && newNoteEntryObject.content) {
+    newTitle = newNoteEntryObject.title;
+    newContent = newNoteEntryObject.content;
+
+    const response = await pool.query<NoteEntry>(
+      `
+        UPDATE note_entries SET title = $1, content = $2 WHERE id = $3 RETURNING *;
+      `,
+      [newTitle, newContent, Number(noteId)],
+    );
+
+    return response.rows[0];
   }
   
   console.log(noteId);
