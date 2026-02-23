@@ -4,6 +4,7 @@ import pool from '../../db/pool';
 import app from '../app';
 import supertest from 'supertest';
 import note_entries_helper from './note_entries_helper';
+import { NoteEntry } from '../types/notebook';
 // import { NoteEntry } from '../types/notebook';
 // import { NoteEntry } from '../types/notebook';
 
@@ -54,13 +55,26 @@ void describe('POST Requests', () => {
       title: 'this is not the end',
       content: 'You are doing a good job. Do NOT give up!',
     };
+    
+    const notesAtStart = await note_entries_helper.getNotesInDb();
 
     const response = await api
       .post(baseUrl)
       .send(note)
       .expect(201);
     
-    console.log(response.body);
+    assert.ok(response);
+    assert(typeof response.body === 'object');
+    const savedNote = response.body as NoteEntry;
+
+    const notesAtEnd = await note_entries_helper.getNotesInDb();
+
+    // check note entries length before and after POST request; MUST be 1 more
+    assert.strictEqual(notesAtEnd.length, notesAtStart.length + 1);
+
+    // check note entries includes the new note after POST request;
+    const titles = notesAtEnd.map(note => note.title);
+    assert(titles.includes(savedNote.title));
   });
 });
 
