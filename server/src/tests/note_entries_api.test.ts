@@ -107,13 +107,24 @@ void describe('PUT Requests', () => {
       title: 'new title to be updated',
     };
 
+    const notesAtStart = await note_entries_helper.getNotesInDb();
+    
     const response = await api
       .put(`${baseUrl}/${updateNoteId}`)
       .send(newContent)
       .expect(200);
+    
+    const notesAtEnd = await note_entries_helper.getNotesInDb();
 
     assert.ok(response);
     assert.strictEqual(response.type, 'application/json');
+
+    // Check if DB updated the title after PUT request
+    const titlesAtEnd = notesAtEnd.map(n => n.title);
+    assert(titlesAtEnd.includes(newContent.title));
+    
+    // Ensure DB size does not change after PUT request
+    assert.strictEqual(notesAtEnd.length, notesAtStart.length);
   });
 });
 
