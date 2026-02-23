@@ -48,6 +48,22 @@ void describe('GET Requests', () => {
   });
 });
 
+void describe('POST Requests', () => {
+  void test('returns status 201, creates one note, and returns the note as JSON', async () => {
+    const note = {
+      title: 'this is not the end',
+      content: 'You are doing a good job. Do NOT give up!',
+    };
+
+    const response = await api
+      .post(baseUrl)
+      .send(note)
+      .expect(201);
+    
+    console.log(response.body);
+  });
+});
+
 after(async () => {
   await pool.end();
 });
