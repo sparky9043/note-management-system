@@ -99,6 +99,21 @@ void describe('POST Requests', () => {
   });
 });
 
+void describe('PUT Requests', () => {
+  const updateNoteId = 1;
+
+  const newContent = {
+    content: 'new content to be updated',
+  };
+
+  void test('returns status 204 if delete is successful', async () => {
+    await api
+      .put(`${baseUrl}/${updateNoteId}`)
+      .send(newContent)
+      .expect(200);
+  });
+});
+
 after(async () => {
   await pool.end();
 });
