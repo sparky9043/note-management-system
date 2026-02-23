@@ -100,17 +100,20 @@ void describe('POST Requests', () => {
 });
 
 void describe('PUT Requests', () => {
-  const updateNoteId = 1;
+  void test('returns status 200 if request has title only', async () => {
+    const updateNoteId = 1;
 
-  const newContent = {
-    content: 'new content to be updated',
-  };
+    const newContent = {
+      title: 'new title to be updated',
+    };
 
-  void test('returns status 200 if successful', async () => {
-    await api
+    const response = await api
       .put(`${baseUrl}/${updateNoteId}`)
       .send(newContent)
       .expect(200);
+
+    assert.ok(response);
+    assert.strictEqual(response.type, 'application/json');
   });
 });
 
