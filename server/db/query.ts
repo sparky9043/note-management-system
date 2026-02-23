@@ -49,7 +49,7 @@ const createNote = async (newNoteEntryObject: NewNoteEntry): Promise<NoteEntry> 
   return response.rows[0];
 };
 
-const updateNoteById = (noteId: number) => {
+const updateNoteById = async (noteId: number, newNoteEntryObject: NewNoteEntry) => {
   console.log(noteId);
 };
 
