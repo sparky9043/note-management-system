@@ -49,4 +49,8 @@ const createNote = async (newNoteEntryObject: NewNoteEntry): Promise<NoteEntry> 
   return response.rows[0];
 };
 
-export default { getNotes, createNote, getNoteById };
+const updateNoteById = (noteId: number) => {
+  console.log(noteId);
+};
+
+export default { getNotes, createNote, getNoteById, updateNoteById };
