@@ -106,7 +106,7 @@ void describe('PUT Requests', () => {
     content: 'new content to be updated',
   };
 
-  void test('returns status 204 if delete is successful', async () => {
+  void test('returns status 200 if successful', async () => {
     await api
       .put(`${baseUrl}/${updateNoteId}`)
       .send(newContent)
