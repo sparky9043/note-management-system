@@ -1,4 +1,4 @@
-import error from "../src/errors/error";
+import httpErrors from "../src/errors/httpErrors";
 import { NewNoteEntry, NoteEntry } from "../src/types/notebook";
 import pool from "./pool";
 
@@ -21,7 +21,7 @@ const getNoteById = async (noteId: number): Promise<NoteEntry> => {
   );
 
   if (!response.rows || !response.rows.length) {
-    throw new error.NotFoundError('no notes found by that id');
+    throw new httpErrors.NotFoundError('no notes found by that id');
   }
 
   return response.rows[0];
@@ -31,7 +31,7 @@ const createNote = async (newNoteEntryObject: NewNoteEntry): Promise<NoteEntry> 
   const { title, content } = newNoteEntryObject;
 
   if (!title || !content) {
-    throw new error.ValidationError('please fill out all the required fields');
+    throw new httpErrors.ValidationError('please fill out all the required fields');
   }
 
   const response = await pool.query<NoteEntry>(
@@ -43,7 +43,7 @@ const createNote = async (newNoteEntryObject: NewNoteEntry): Promise<NoteEntry> 
   );
 
   if (!response.rows || !response.rows.length) {
-    throw new error.HttpError('unexpected error occurred');
+    throw new httpErrors.HttpError('unexpected error occurred');
   }
 
   return response.rows[0];
