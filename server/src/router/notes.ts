@@ -39,7 +39,10 @@ notesRouter.post('/', async (req: Request<unknown, unknown, NewNoteEntry>, res: 
 
 notesRouter.put('/:id', async (req: Request<{ id: string }, unknown, NewNoteEntry>, res: Response, next: NextFunction) => {
   try {
-    await query.updateNoteById(Number(req.params.id), req.body);
+    const noteId = Number(req.params.id);
+    const newNote = req.body;
+
+    await query.updateNoteById(noteId, newNote);
 
     res.send({ success: 'success' });
   } catch (error) {
