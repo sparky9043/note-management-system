@@ -4,7 +4,7 @@ import pool from '../../db/pool';
 import app from '../app';
 import supertest from 'supertest';
 import note_entries_helper from './note_entries_helper';
-import { NoteEntry } from '../types/notebook';
+import { NewNoteEntry, NoteEntry } from '../types/notebook';
 // import { NoteEntry } from '../types/notebook';
 // import { NoteEntry } from '../types/notebook';
 
@@ -100,8 +100,9 @@ void describe('POST Requests', () => {
 });
 
 void describe('PUT Requests', () => {
+  const updateNoteId = 1;
+
   void test('returns status 200 if request has title only', async () => {
-    const updateNoteId = 1;
 
     const newTitleOnly = {
       title: 'new title to be updated',
@@ -128,8 +129,6 @@ void describe('PUT Requests', () => {
   });
   
   void test('returns status 200 if request has content only', async () => {
-    const updateNoteId = 1;
-
     const newContentOnly = {
       content: 'new content to be updated',
     };
@@ -155,8 +154,6 @@ void describe('PUT Requests', () => {
   });
 
   void test('returns status 200 if request has both title and content', async () => {
-    const updateNoteId = 1;
-
     const newNote = {
       title: 'sample title',
       content: 'new content to be updated',
@@ -183,6 +180,19 @@ void describe('PUT Requests', () => {
     
     // Ensure DB size does not change after PUT request
     assert.strictEqual(notesAtEnd.length, notesAtStart.length);
+  });
+
+  void test('returns status 400 if both title and content are missing', async () => {
+    const badNote = {} as NewNoteEntry;
+
+    const response = await api
+      .put(`${baseUrl}/${updateNoteId}`)
+      .send(badNote)
+      .expect(400);
+    
+    const errorResponse = response.body as ErrorResponse;
+
+    assert.strictEqual(errorResponse.status, 'error');
   });
 });
 
